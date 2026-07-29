@@ -8,11 +8,8 @@ const name = 'GitRevision'
 
 function unpluginFactory(options: GitRevision.InputOptions): GitRevision.OptionsForCreateUnplugin {
   let isError = false
-  if (options === null || options === undefined) {
-    consoler.error('"options" is required')
-    isError = true
-  } else if (Object.prototype.toString.call(options) !== '[object Object]' || Object.keys(options).length === 0) {
-    consoler.error('"options" must be a valid JSON object')
+  if (options === undefined && (Object.prototype.toString.call(options) !== '[object Object]' || Object.keys(options).length === 0)) {
+    consoler.error('"options" must be empty or a valid JSON object')
     isError = true
   }
   if (isError) {
