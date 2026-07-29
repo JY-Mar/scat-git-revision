@@ -7,6 +7,24 @@ import { DEFAULT_OPTIONS, COMMAND_VERSION } from './options'
 const name = 'GitRevision'
 
 function unpluginFactory(options: GitRevision.InputOptions): GitRevision.OptionsForCreateUnplugin {
+  let isError = false
+  if (options === null || options === undefined) {
+    consoler.error('"options" is required')
+    isError = true
+  } else if (Object.prototype.toString.call(options) !== '[object Object]' || Object.keys(options).length === 0) {
+    consoler.error('"options" must be a valid JSON object')
+    isError = true
+  }
+  if (isError) {
+    // 仅打印错误，返回空插件，不中断外部打包流程
+    return {
+      name,
+      async execute(showConsoler = true) {
+        return Promise.resolve()
+      }
+    }
+  }
+
   // 校验选项
   if (options?.versionCommand && options?.lightweightTags) {
     throw new Error("lightweightTags can't be used together versionCommand")
